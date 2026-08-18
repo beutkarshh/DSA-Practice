@@ -12,7 +12,7 @@ Progress log across tracks. One row per problem; link the write-up in `problems/
 | Binary Search | [problems/binary-search/](problems/binary-search/) | 0 | |
 | Sliding Window | [problems/sliding-window/](problems/sliding-window/) | 0 | |
 | Recursion | [problems/recursion/](problems/recursion/) | 2 | write-ups still empty; 2 open questions |
-| Trees | [problems/trees/](problems/trees/) | 2 | active track |
+| Trees | [problems/trees/](problems/trees/) | 5 | active track |
 | Graphs | [problems/graphs/](problems/graphs/) | 0 | |
 | DP | [problems/dp/](problems/dp/) | 0 | |
 
@@ -21,9 +21,9 @@ Progress log across tracks. One row per problem; link the write-up in `problems/
 Concepts raised but not yet closed out. Clear these before going deeper into Trees.
 
 - **Pass-by-reference for accumulators** — why `vector<int>&` and not `vector<int>`. Opened on
-  House Robber's `dp`, resurfaced on LC 94/144. Reasoning is written up in
-  [0094](problems/trees/0094-binary-tree-inorder-traversal.md); still wants an explicit confirmation.
-- **Unique Paths base cases** — precise conditions at `m-1`, `n-1`. Still open.
+  House Robber's `dp`, resurfaced on LC 94/144, still open after session 2 of Trees. Reasoning is
+  written up in [0094](problems/trees/0094-binary-tree-inorder-traversal.md); wants explicit confirmation.
+- **Unique Paths base cases** — precise conditions at `m-1`, `n-1`. Still open, carried 2 sessions.
 
 ## Recursion
 
@@ -52,10 +52,17 @@ Concepts raised but not yet closed out. Clear these before going deeper into Tre
 | # | Problem | Difficulty | Status | Last touched | Write-up |
 | --- | --- | --- | --- | --- | --- |
 | 94 | Binary Tree Inorder Traversal | Easy | solved | 2026-08-18 | [0094-binary-tree-inorder-traversal.md](problems/trees/0094-binary-tree-inorder-traversal.md) |
+| 100 | Same Tree | Easy | solved | 2026-08-18 | [0100-same-tree.md](problems/trees/0100-same-tree.md) |
+| 101 | Symmetric Tree | Easy | solved | 2026-08-18 | [0101-symmetric-tree.md](problems/trees/0101-symmetric-tree.md) |
 | 144 | Binary Tree Preorder Traversal | Easy | solved | 2026-08-18 | [0144-binary-tree-preorder-traversal.md](problems/trees/0144-binary-tree-preorder-traversal.md) |
+| 145 | Binary Tree Postorder Traversal | Easy | solved | 2026-08-18 | [0145-binary-tree-postorder-traversal.md](problems/trees/0145-binary-tree-postorder-traversal.md) |
 
-**Next up:** 145 Postorder Traversal (completes the root-position contrast — root last), then
-102 Level Order. Max Depth available as a lighter warm-up.
+**Patterns covered:** traversal trio (94/144/145 — root first, middle, last) and lockstep two-tree
+recursion (100 equality, 101 mirror).
+
+**Next up:** 104 Maximum Depth — first tree problem where the recursion returns a *computed value*
+(an int built from both children's results) rather than a bool or an accumulator. Bridges toward
+height/depth problems. Then 102 Level Order.
 
 ## Graphs
 
