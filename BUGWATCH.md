@@ -6,6 +6,7 @@ before an interview does.
 
 | Pattern | Where it bit me | Tell / how to catch it | Times |
 | --- | --- | --- | --- |
+| **Invented member/field name** — reaching for a plausible-sounding name instead of the real one (`node->value` for `node->val`). Not an operator or index confusion; the name simply doesn't exist. | LC 144 Preorder (2026-08-18) | Compiler catches it, but the fix is to go **reread the struct/class definition** rather than guess a second time. Under time pressure the guess feels certain — that certainty is the tell. | 1 |
 
 ## Per-track watchlist
 
@@ -26,6 +27,7 @@ before an interview does.
 
 ### Trees
 - [ ] Not handling the null/None node before dereferencing.
+- [ ] `node->val` — check the member name against the given struct, don't type it from memory.
 
 ### Graphs
 - [ ] Marking visited at dequeue instead of enqueue — duplicates in the queue.
