@@ -36,6 +36,14 @@ before an interview does.
 - [ ] Two-tree recursion: which children pair up? Same-position (`l->left`/`r->left`) for equality,
       crossed (`l->left`/`r->right`) for mirror. Picking the wrong one silently solves a different problem.
 - [ ] Calling the one-arg wrapper where the two-arg helper was meant — check arity at every recursive call.
+- [ ] Height base case is **`height(NULL) = 0`**, not "leaf = 0". A leaf's 1 is *derived*
+      (`1 + max(0,0)`). Anchoring on the leaf instead of the null child is the usual off-by-one here.
+- [ ] Path lengths: edges or nodes? Diameter counts **edges**, so `leftHeight + rightHeight` with no
+      `+1`. Reread the problem statement before adding a constant.
+- [ ] Called a recursive helper twice on the same child instead of storing the result. Compiles, passes,
+      silently costs an exponential blowup. If `height(node->left, ...)` appears twice, store it.
+- [ ] Accumulator/tracker parameter declared without `&`. Closed as a concept on LC 543, but the
+      *typo* stays easy — a missing `&` compiles fine and quietly returns the initial value.
 
 ### Graphs
 - [ ] Marking visited at dequeue instead of enqueue — duplicates in the queue.

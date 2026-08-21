@@ -61,8 +61,8 @@ Inorder = `4, 2, 5, 1, 3`. Traced by hand and confirmed call-by-call against the
 - On a BST, inorder is the traversal that comes out **sorted**. That property is specific to
   inorder and is the usual reason to reach for it over the other two orders.
 
-## Open questions
+## Open questions — resolved
 
-- Why `vector<int>&` and not `vector<int>` — reasoned through above but **not yet explicitly
-  confirmed**. Same question that was left open on House Robber's `dp` vector; it resurfaced here
-  in a tree-recursion context. Worth closing out loud before going deeper into Trees.
+- ~~Why `vector<int>&` and not `vector<int>`~~ — **closed 2026-08-18** on
+  [LC 543](0543-diameter-of-binary-tree.md). A reference aliases the caller's memory; a value
+  parameter is a per-frame copy discarded on return. Confirmed against `swap(int&, int&)`.
