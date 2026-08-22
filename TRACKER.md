@@ -12,7 +12,7 @@ Progress log across tracks. One row per problem; link the write-up in `problems/
 | Binary Search | [problems/binary-search/](problems/binary-search/) | 0 | |
 | Sliding Window | [problems/sliding-window/](problems/sliding-window/) | 0 | |
 | Recursion | [problems/recursion/](problems/recursion/) | 2 | write-ups still empty; 2 open questions |
-| Trees | [problems/trees/](problems/trees/) | 9 | active track |
+| Trees | [problems/trees/](problems/trees/) | 10 | active track |
 | Graphs | [problems/graphs/](problems/graphs/) | 0 | |
 | DP | [problems/dp/](problems/dp/) | 0 | |
 
@@ -67,6 +67,7 @@ Concepts raised but not yet closed out.
 | 110 | Balanced Binary Tree | Easy | solved | 2026-08-22 | [0110-balanced-binary-tree.md](problems/trees/0110-balanced-binary-tree.md) |
 | 111 | Minimum Depth of Binary Tree | Easy | solved | 2026-08-22 | [0111-minimum-depth-of-binary-tree.md](problems/trees/0111-minimum-depth-of-binary-tree.md) |
 | 543 | Diameter of Binary Tree | Easy | solved | 2026-08-18 | [0543-diameter-of-binary-tree.md](problems/trees/0543-diameter-of-binary-tree.md) |
+| 572 | Subtree of Another Tree | Easy | solved | 2026-08-22 | [0572-subtree-of-another-tree.md](problems/trees/0572-subtree-of-another-tree.md) |
 
 **Patterns covered:** traversal trio (94/144/145 — root first, middle, last), lockstep two-tree
 recursion (100 equality, 101 mirror), dual-purpose helper returning a value while updating a
@@ -75,6 +76,9 @@ answer composes from children alone (104, 111).
 
 **Height-helper family:** 543, 110, and 104 all run the same `1 + max(left, right)` recursion. What
 changes is what rides along with it — nothing (104), a running max (543), or a bool flag (110).
+
+**Composition:** 572 is the first problem solved by *reusing a previous solution* — LC 100's
+`isSameTree` dropped in unchanged as a primitive, with only the outer search written fresh.
 
 **Depth family:** 104 and 111 look symmetric and are not — see
 [0111](problems/trees/0111-minimum-depth-of-binary-tree.md) for why swapping `max` for `min`

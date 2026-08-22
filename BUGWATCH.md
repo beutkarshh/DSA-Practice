@@ -9,6 +9,9 @@ before an interview does.
 | **Null-checked the wrong thing** — `p->val == NULL` instead of `p == nullptr`. Asks "is this node's value zero" when the intent is "does this node exist". Distinct from the member-name typo below: the name is real, the *question* is wrong. | LC 100 Same Tree (2026-08-18) | **Compiles silently** — no compiler help. Tell: you already dereferenced `p` in order to null-check `p`, which is backwards. If `->` appears in a null guard, it's wrong. | 1 |
 | **Local variable shadowing the function name** — declared `bool isBalanced` inside the function `isBalanced`. | LC 110 Balanced (2026-08-22) | Compiles or errors confusingly depending on context, and reads fine to a tired eye. Tell: the tracker variable wants the same obvious name as the function computing it. Give the local a distinct name (`balanced`). | 1 |
 | **Two jobs, one return** — tried to return the *verdict* from a helper whose return type is the *height*. | LC 110 Balanced (2026-08-22) | A function has one return type. When a recursion must produce two pieces of information, one returns and the other travels by reference. Tell: you're about to write `return false;` in a function declared `int`. | 1 |
+| **Case-sensitivity slip** — `P` for `p`, `subroot` for `subRoot`. | LC 572 Subtree (2026-08-22), 3 times in one sitting | Compiler catches it, but it burns submissions and focus. Tell: it clusters when a signature has both a short and a camelCase name. | 3 |
+| **Copy-paste without editing** — duplicated a null-check line and left `&&` where the second one needed `\|\|`. | LC 572 Subtree (2026-08-22) | **Compiles and often passes some tests.** Caught here by diffing against the filed 0100 write-up. Tell: two adjacent near-identical lines — read the second one on its own terms, not as a copy of the first. | 1 |
+| **Recomputed a subproblem already available** — called `isSameTree(root, subRoot)` once per `if` branch instead of once into the OR chain. | LC 572 Subtree (2026-08-22); avoided on LC 543 | Costs complexity silently, never fails a test. Tell: the same call appears twice with identical arguments. Store it, or restructure so it's evaluated once. | 1 |
 | **Guard ordering** — wrote the dereferencing case before the null guards, so the guards never ran. Null-pointer crash. | LC 100 Same Tree (2026-08-18); latent in LC 101 wrapper; LC 111 Min Depth (2026-08-22) | Guards go **first**, before any `->`. Scan top-down: is every dereference below the guard that protects it? **Most persistent pattern in the log.** | 3 |
 | **Wrong name for the parameter in scope** — typed `node->left` in a function whose parameter is `root`; earlier, `root` inside `isMirror` whose params are `left`/`right`. Reaching for a name from a *different* function's signature. | LC 101 Symmetric (2026-08-18); LC 104 Max Depth (2026-08-22) | Compiler catches it. Tell: it shows up right after copying a solution shape from a previous problem — the old parameter name comes along with the pattern. Rename deliberately when you reuse a skeleton. | 2 |
 | **`&` for `&&`** — bitwise AND where logical AND was meant. | LC 100 Same Tree (2026-08-18), recurred within session | Compiles, and often *works* on bools, which is why it survives. Grep the boolean conditions for single `&`/`\|` before submitting. | 2 |
@@ -53,6 +56,10 @@ before an interview does.
 - [ ] Whole-tree properties (balance, BST-ness) must be checked at **every** node, not just the root.
       Ride the check along inside an existing O(n) traversal rather than recomputing per node (O(n^2)).
 - [ ] A one-way flag (true → false, never back) needs no short-circuit — but confirm nothing resets it.
+- [ ] Reusing a solved problem as a primitive? Its base case may not transfer — `isSameTree` says
+      "both null → true", `isSubtree` says "null root → false". Different question, different empty case.
+- [ ] `return A || B || C;` — not `if (A||B||C) return true; else return false;`. The branch form
+      invites evaluating `A` twice.
 
 ### Graphs
 - [ ] Marking visited at dequeue instead of enqueue — duplicates in the queue.
