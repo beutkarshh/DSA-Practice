@@ -7,6 +7,8 @@ before an interview does.
 | Pattern | Where it bit me | Tell / how to catch it | Times |
 | --- | --- | --- | --- |
 | **Null-checked the wrong thing** — `p->val == NULL` instead of `p == nullptr`. Asks "is this node's value zero" when the intent is "does this node exist". Distinct from the member-name typo below: the name is real, the *question* is wrong. | LC 100 Same Tree (2026-08-18) | **Compiles silently** — no compiler help. Tell: you already dereferenced `p` in order to null-check `p`, which is backwards. If `->` appears in a null guard, it's wrong. | 1 |
+| **Local variable shadowing the function name** — declared `bool isBalanced` inside the function `isBalanced`. | LC 110 Balanced (2026-08-22) | Compiles or errors confusingly depending on context, and reads fine to a tired eye. Tell: the tracker variable wants the same obvious name as the function computing it. Give the local a distinct name (`balanced`). | 1 |
+| **Two jobs, one return** — tried to return the *verdict* from a helper whose return type is the *height*. | LC 110 Balanced (2026-08-22) | A function has one return type. When a recursion must produce two pieces of information, one returns and the other travels by reference. Tell: you're about to write `return false;` in a function declared `int`. | 1 |
 | **Guard ordering** — wrote the dereferencing case before the null guards, so the guards never ran. Null-pointer crash. | LC 100 Same Tree (2026-08-18); latent in LC 101 wrapper; LC 111 Min Depth (2026-08-22) | Guards go **first**, before any `->`. Scan top-down: is every dereference below the guard that protects it? **Most persistent pattern in the log.** | 3 |
 | **Wrong name for the parameter in scope** — typed `node->left` in a function whose parameter is `root`; earlier, `root` inside `isMirror` whose params are `left`/`right`. Reaching for a name from a *different* function's signature. | LC 101 Symmetric (2026-08-18); LC 104 Max Depth (2026-08-22) | Compiler catches it. Tell: it shows up right after copying a solution shape from a previous problem — the old parameter name comes along with the pattern. Rename deliberately when you reuse a skeleton. | 2 |
 | **`&` for `&&`** — bitwise AND where logical AND was meant. | LC 100 Same Tree (2026-08-18), recurred within session | Compiles, and often *works* on bools, which is why it survives. Grep the boolean conditions for single `&`/`\|` before submitting. | 2 |
@@ -48,6 +50,9 @@ before an interview does.
 - [ ] A NULL child returns 0 — harmless under `max`, **fatal under `min`** (0 always wins, so a
       one-child node falsely reports as a leaf). Never assume `max`→`min` gives the mirror problem.
 - [ ] "Leaf" means *no children*. A one-child node is not a leaf; don't let a path terminate there.
+- [ ] Whole-tree properties (balance, BST-ness) must be checked at **every** node, not just the root.
+      Ride the check along inside an existing O(n) traversal rather than recomputing per node (O(n^2)).
+- [ ] A one-way flag (true → false, never back) needs no short-circuit — but confirm nothing resets it.
 
 ### Graphs
 - [ ] Marking visited at dequeue instead of enqueue — duplicates in the queue.
