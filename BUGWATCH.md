@@ -7,7 +7,8 @@ before an interview does.
 | Pattern | Where it bit me | Tell / how to catch it | Times |
 | --- | --- | --- | --- |
 | **Null-checked the wrong thing** — `p->val == NULL` instead of `p == nullptr`. Asks "is this node's value zero" when the intent is "does this node exist". Distinct from the member-name typo below: the name is real, the *question* is wrong. | LC 100 Same Tree (2026-08-18) | **Compiles silently** — no compiler help. Tell: you already dereferenced `p` in order to null-check `p`, which is backwards. If `->` appears in a null guard, it's wrong. | 1 |
-| **Guard ordering** — wrote the dereferencing case before the null guards, so the guards never ran. Null-pointer crash. | LC 100 Same Tree (2026-08-18); latent in LC 101 wrapper | Guards go **first**, before any `->`. Scan top-down: is every dereference below the guard that protects it? | 2 |
+| **Guard ordering** — wrote the dereferencing case before the null guards, so the guards never ran. Null-pointer crash. | LC 100 Same Tree (2026-08-18); latent in LC 101 wrapper; LC 111 Min Depth (2026-08-22) | Guards go **first**, before any `->`. Scan top-down: is every dereference below the guard that protects it? **Most persistent pattern in the log.** | 3 |
+| **Wrong name for the parameter in scope** — typed `node->left` in a function whose parameter is `root`; earlier, `root` inside `isMirror` whose params are `left`/`right`. Reaching for a name from a *different* function's signature. | LC 101 Symmetric (2026-08-18); LC 104 Max Depth (2026-08-22) | Compiler catches it. Tell: it shows up right after copying a solution shape from a previous problem — the old parameter name comes along with the pattern. Rename deliberately when you reuse a skeleton. | 2 |
 | **`&` for `&&`** — bitwise AND where logical AND was meant. | LC 100 Same Tree (2026-08-18), recurred within session | Compiles, and often *works* on bools, which is why it survives. Grep the boolean conditions for single `&`/`\|` before submitting. | 2 |
 | **Invented member/field name** — reaching for a plausible-sounding name instead of the real one (`node->value` for `node->val`). Not an operator or index confusion; the name simply doesn't exist. | LC 144 Preorder (2026-08-18) | Compiler catches it, but the fix is to go **reread the struct/class definition** rather than guess a second time. Under time pressure the guess feels certain — that certainty is the tell. | 1 |
 
@@ -44,6 +45,9 @@ before an interview does.
       silently costs an exponential blowup. If `height(node->left, ...)` appears twice, store it.
 - [ ] Accumulator/tracker parameter declared without `&`. Closed as a concept on LC 543, but the
       *typo* stays easy — a missing `&` compiles fine and quietly returns the initial value.
+- [ ] A NULL child returns 0 — harmless under `max`, **fatal under `min`** (0 always wins, so a
+      one-child node falsely reports as a leaf). Never assume `max`→`min` gives the mirror problem.
+- [ ] "Leaf" means *no children*. A one-child node is not a leaf; don't let a path terminate there.
 
 ### Graphs
 - [ ] Marking visited at dequeue instead of enqueue — duplicates in the queue.
