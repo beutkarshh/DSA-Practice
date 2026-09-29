@@ -6,7 +6,7 @@ before an interview does.
 
 | Pattern | Where it bit me | Tell / how to catch it | Times |
 | --- | --- | --- | --- |
-| **Null-checked the wrong thing** — `p->val == NULL` instead of `p == nullptr`. Asks "is this node's value zero" when the intent is "does this node exist". Distinct from the member-name typo below: the name is real, the *question* is wrong. | LC 100 Same Tree (2026-08-18) | **Compiles silently** — no compiler help. Tell: you already dereferenced `p` in order to null-check `p`, which is backwards. If `->` appears in a null guard, it's wrong. | 1 |
+| **Null-checked the wrong thing** — `p->val == NULL` instead of `p == nullptr`. Asks "is this node's value zero" when the intent is "does this node exist". Distinct from the member-name typo below: the name is real, the *question* is wrong. | LC 100 Same Tree (2026-08-18); linked-list basics search (2026-09-22, `head->data == NULL`) | **Compiles silently** — no compiler help. Tell: you already dereferenced `p` in order to null-check `p`, which is backwards. If `->` appears in a null guard, it's wrong. | 2 |
 | **Local variable shadowing the function name** — declared `bool isBalanced` inside the function `isBalanced`. | LC 110 Balanced (2026-08-22) | Compiles or errors confusingly depending on context, and reads fine to a tired eye. Tell: the tracker variable wants the same obvious name as the function computing it. Give the local a distinct name (`balanced`). | 1 |
 | **Two jobs, one return** — tried to return the *verdict* from a helper whose return type is the *height*. | LC 110 Balanced (2026-08-22) | A function has one return type. When a recursion must produce two pieces of information, one returns and the other travels by reference. Tell: you're about to write `return false;` in a function declared `int`. | 1 |
 | **Case-sensitivity slip** — `P` for `p`, `subroot` for `subRoot`. | LC 572 Subtree (2026-08-22), 3 times in one sitting | Compiler catches it, but it burns submissions and focus. Tell: it clusters when a signature has both a short and a camelCase name. | 3 |
@@ -83,6 +83,9 @@ before an interview does.
 - [ ] Fast/slow gap: to stop on the *predecessor*, fast leads by `n + 1`; leading by `n` lands on the target.
 - [ ] Deleting anything that might be the head? Use a dummy node so there's always a "before".
 - [ ] Brace balance after adding a second function to the same block (`unknown type name` is the tell).
+- [ ] Null guard is `head == nullptr`, never `head->data == NULL`. Same bug as the Trees row.
+- [ ] Recursive list functions: base cases are "ran off the end" and "found it"; the recursive call
+      takes `head->next`, and its result must be *returned*, not dropped.
 - [ ] Empty-list guard returns the declared type (`return head;`), never `-1`.
 
 ### Graphs
