@@ -6,20 +6,22 @@ before an interview does.
 
 | Pattern | Where it bit me | Tell / how to catch it | Times |
 | --- | --- | --- | --- |
-| **Null-checked the wrong thing** — `p->val == NULL` instead of `p == nullptr`. Asks "is this node's value zero" when the intent is "does this node exist". Distinct from the member-name typo below: the name is real, the *question* is wrong. | LC 100 Same Tree (2026-08-18); linked-list basics search (2026-09-22, `head->data == NULL`) | **Compiles silently** — no compiler help. Tell: you already dereferenced `p` in order to null-check `p`, which is backwards. If `->` appears in a null guard, it's wrong. | 2 |
+| **Null-checked the wrong thing** — `p->val == NULL` instead of `p == nullptr`. Asks "is this node's value zero" when the intent is "does this node exist". Distinct from the member-name typo below: the name is real, the *question* is wrong. | LC 100 Same Tree (2026-08-18); linked-list search `head->data == NULL` (2026-09-22) | **Compiles silently** — no compiler help. Tell: you already dereferenced `p` in order to null-check `p`, which is backwards. If `->` appears in a null guard, it's wrong. | 2 |
 | **Local variable shadowing the function name** — declared `bool isBalanced` inside the function `isBalanced`. | LC 110 Balanced (2026-08-22) | Compiles or errors confusingly depending on context, and reads fine to a tired eye. Tell: the tracker variable wants the same obvious name as the function computing it. Give the local a distinct name (`balanced`). | 1 |
 | **Two jobs, one return** — tried to return the *verdict* from a helper whose return type is the *height*. | LC 110 Balanced (2026-08-22) | A function has one return type. When a recursion must produce two pieces of information, one returns and the other travels by reference. Tell: you're about to write `return false;` in a function declared `int`. | 1 |
-| **Case-sensitivity slip** — `P` for `p`, `subroot` for `subRoot`. | LC 572 Subtree (2026-08-22), 3 times in one sitting | Compiler catches it, but it burns submissions and focus. Tell: it clusters when a signature has both a short and a camelCase name. | 3 |
+| **Case-sensitivity / spelling slip** — `P` for `p`, `subroot` for `subRoot`, `TRUE` for `true`, `addAthead`, `toDelte`. | LC 572 Subtree (2026-08-22), 3 times; linked-list basics (2026-09-22); LC 707 (2026-09-29), twice | Compiler catches it, but it burns submissions and focus. Tell: it clusters when a signature has both a short and a camelCase name. | 6 |
 | **Copy-paste without editing** — duplicated a null-check line and left `&&` where the second one needed `\|\|`. | LC 572 Subtree (2026-08-22) | **Compiles and often passes some tests.** Caught here by diffing against the filed 0100 write-up. Tell: two adjacent near-identical lines — read the second one on its own terms, not as a copy of the first. | 1 |
 | **Recomputed a subproblem already available** — called `isSameTree(root, subRoot)` once per `if` branch instead of once into the OR chain. | LC 572 Subtree (2026-08-22); avoided on LC 543 | Costs complexity silently, never fails a test. Tell: the same call appears twice with identical arguments. Store it, or restructure so it's evaluated once. | 1 |
 | **Guard ordering** — wrote the dereferencing case before the null guards, so the guards never ran. Null-pointer crash. | LC 100 Same Tree (2026-08-18); latent in LC 101 wrapper; LC 111 Min Depth (2026-08-22) | Guards go **first**, before any `->`. Scan top-down: is every dereference below the guard that protects it? **Most persistent pattern in the log.** | 3 |
 | **Wrong name for the parameter in scope** — typed `node->left` in a function whose parameter is `root`; earlier, `root` inside `isMirror` whose params are `left`/`right`. Reaching for a name from a *different* function's signature. | LC 101 Symmetric (2026-08-18); LC 104 Max Depth (2026-08-22) | Compiler catches it. Tell: it shows up right after copying a solution shape from a previous problem — the old parameter name comes along with the pattern. Rename deliberately when you reuse a skeleton. | 2 |
 | **`&` for `&&`** — bitwise AND where logical AND was meant. | LC 100 Same Tree (2026-08-18), recurred within session | Compiles, and often *works* on bools, which is why it survives. Grep the boolean conditions for single `&`/`\|` before submitting. | 2 |
-| **Invented member/field name** — reaching for a plausible-sounding name instead of the real one (`node->value` for `node->val`). Not an operator or index confusion; the name simply doesn't exist. | LC 144 Preorder (2026-08-18) | Compiler catches it, but the fix is to go **reread the struct/class definition** rather than guess a second time. Under time pressure the guess feels certain — that certainty is the tell. | 2 |
-| **Wrong-type return** — `return -1;` in a function that doesn't return an `int` (`void`, `ListNode*`). Reflex from `get`-style "not found" returns. | LC 707 Design Linked List (`void` function), LC 328 Odd Even (`ListNode*`) (2026-09-29) | Compiler catches it. Tell: an early-exit guard on an empty/invalid input. Read the declared return type first; for pointer-returning list functions the empty case is `return head;` (or `nullptr`). | 2 |
-| **Missing `return` after a special-case block** — handled index 0 / empty list, updated `size`, then fell through into the general code. | LC 707 Design Linked List (2026-09-29), 3 times (`addAtTail`, `addAtIndex`, `deleteAtIndex`) | Compiles and passes the easy cases; shows up as a self-loop, double insert, or two deletes. Tell: an `if (edge case) { ... }` block that doesn't end in `return`. Pattern is special case → update `size` → `return`. | 3 |
-| **Walker reset inside the loop** — wrote `Node* curr = head;` in the loop body (or as the loop's first line), so the walker restarts every pass and `curr` is out of scope after the loop. | LC 707 Design Linked List (2026-09-29), 3 times (`get`, `addAtTail`, `addAtIndex`) | Declare `curr` **once, above** the `for`; the loop only advances it (`curr = curr->next`). Tell: `= head` appearing anywhere below the `for (`. | 3 |
-| **Wrong link order** — rewired `curr->next` before the new node grabbed the old `curr->next`, losing the tail or making a self-loop. | LC 707 Design Linked List (2026-09-29), twice in `addAtIndex` | Save before you break: `newNode->next = curr->next;` **then** `curr->next = newNode;`. Tell: the line that *reads* an arrow comes after the line that *overwrites* it. | 2 |
+| **Walker declared inside the loop** — `Node* curr = head;` inside the `for`. Resets to `head` every pass, and `curr` no longer exists after the loop. | LC 707 Design (2026-09-29), 3 times in one sitting | Tell: the only line inside a walking loop should be `curr = curr->next`. Declaration goes once, above. Self-corrected by the end of the session. | 3 |
+| **Missing `return` after a special case** — handled the empty/index-0 case, then fell through into the general code. | LC 707 Design (2026-09-29): self-loop, double insert, double delete | Tell: after an `if` that fully handles a case, ask "should anything below still run?" Pattern: handle → update `size` → `return`. | 3 |
+| **Return value doesn't match the function's type** — `return -1;` in `void`, `return -1;` in a `ListNode*` function. Extends "two jobs, one return". | LC 707 (2026-09-29); LC 328 (2026-09-29); cf. LC 110 | Read the signature before writing any `return`. `void` → `return;`; pointer → a pointer (`nullptr`/`head`). | 2 |
+| **`=` inside a condition** — `if (head = nullptr)`. | LC 707 Design (2026-09-29) | **Compiles.** Assigns, wipes the list, and the branch never runs. Grep every `if`/`while` for a single `=`. | 1 |
+| **Off-by-one on a walk count** — steps to reach a position vs. the position itself (`L - n` vs `L - n - 1`, `size` vs `size - 1`, `n - 1` vs `n + 1`). | LC 19 (2026-09-25), twice; LC 707 addAtTail (2026-09-29) | Trace the smallest list by hand: where does the walker *stop*? Steps from `head` to 0-indexed `i` is exactly `i`. | 3 |
+| **Rewired before saving** — changed an arrow, then tried to read where it used to point. | LC 707 addAtIndex (2026-09-29), twice | Tell: the second line reads `curr->next` after the first line changed it. New node grabs the old arrow first. | 2 |
+| **Invented member/field name** — reaching for a plausible-sounding name instead of the real one (`node->value` for `node->val`). Not an operator or index confusion; the name simply doesn't exist. | LC 144 Preorder (2026-08-18); LC 707 `curr->value` (2026-09-29) | Compiler catches it, but the fix is to go **reread the struct/class definition** rather than guess a second time. Under time pressure the guess feels certain — that certainty is the tell. | 2 |
 
 ## Per-track watchlist
 
@@ -66,27 +68,14 @@ before an interview does.
       invites evaluating `A` twice.
 
 ### Linked List
-- [ ] Walk `i - 1` steps to stand on the node *before* the change; index 0 has no "before" and is its own case.
-- [ ] Every special-case block ends `size` update → `return`.
-- [ ] Walker declared **once above** the loop, never `= head` inside it.
-- [ ] Link order: new node takes the old `next` first, then the previous node points at the new one.
-- [ ] Bound checks: add allows `index == size` (`> size` rejects), delete/get don't (`>= size` rejects).
-- [ ] Calling a helper that already updates `size` (`addAtHead`) and then doing `size++` again.
-- [ ] `=` vs `==` in conditions (`if (head = nullptr)` wipes the list). Compiler may only warn.
-- [ ] Save the node to free (`toDelete`) **before** rerouting the arrow around it.
-- [ ] Splitting into chains: save the second chain's head before the first rewire orphans it.
-- [ ] Loop condition on two walkers: check the faster one (`even != nullptr && even->next != nullptr`),
-      null test first so `->` is never reached on null.
-- [ ] Before searching for a tail, check whether a walker is already standing on it.
-- [ ] Walk counts are 0-indexed steps, not positions: predecessor of 1-indexed position `p` is `p - 1`
-      steps away. Test `n == L` and `L == 1` by hand before submitting.
-- [ ] Fast/slow gap: to stop on the *predecessor*, fast leads by `n + 1`; leading by `n` lands on the target.
-- [ ] Deleting anything that might be the head? Use a dummy node so there's always a "before".
-- [ ] Brace balance after adding a second function to the same block (`unknown type name` is the tell).
-- [ ] Null guard is `head == nullptr`, never `head->data == NULL`. Same bug as the Trees row.
-- [ ] Recursive list functions: base cases are "ran off the end" and "found it"; the recursive call
-      takes `head->next`, and its result must be *returned*, not dropped.
-- [ ] Empty-list guard returns the declared type (`return head;`), never `-1`.
+- [ ] Walking loop: `curr` declared **once above** the loop; only `curr = curr->next` inside.
+- [ ] Insert/delete at `i` → stand on node `i - 1`. Index 0 (or empty list) is the special case — or use a dummy.
+- [ ] Save before you break: `newNode->next = curr->next;` **then** `curr->next = newNode;`.
+- [ ] Deleting: save `toDelete` before rerouting, then `delete toDelete;`.
+- [ ] Add allows `index == size`; delete needs `index < size`.
+- [ ] `while (a != nullptr && a->next != nullptr)` — null check on the left, or it crashes.
+- [ ] Never move `head` to walk; copy it into `curr`/`temp`.
+- [ ] After a loop, ask where the walkers already stand before writing code to find something.
 
 ### Graphs
 - [ ] Marking visited at dequeue instead of enqueue — duplicates in the queue.
