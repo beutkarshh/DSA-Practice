@@ -13,6 +13,7 @@ Progress log across tracks. One row per problem; link the write-up in `problems/
 | Sliding Window | [problems/sliding-window/](problems/sliding-window/) | 0 | |
 | Recursion | [problems/recursion/](problems/recursion/) | 2 | write-ups still empty; 2 open questions |
 | Trees | [problems/trees/](problems/trees/) | 10 | active track |
+| Linked List | [problems/linked-list/](problems/linked-list/) | 1 | new track |
 | Graphs | [problems/graphs/](problems/graphs/) | 0 | |
 | DP | [problems/dp/](problems/dp/) | 0 | |
 
@@ -85,6 +86,15 @@ changes is what rides along with it — nothing (104), a running max (543), or a
 breaks on one-child nodes.
 
 **Next up:** 102 Level Order — first tree problem that isn't plain recursion (BFS with a queue).
+
+## Linked List
+
+| # | Problem | Difficulty | Status | Last touched | Write-up |
+| --- | --- | --- | --- | --- | --- |
+| 707 | Design Linked List | Medium | solved | 2026-09-29 | [0707-design-linked-list.md](problems/linked-list/0707-design-linked-list.md) |
+
+**Patterns covered:** stand on the node *before* the change (walk `i - 1`), save-before-break link
+order, and special-case-then-`return` for index 0. `size` makes bounds checks O(1).
 
 ## Graphs
 

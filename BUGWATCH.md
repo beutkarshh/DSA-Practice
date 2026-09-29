@@ -15,7 +15,10 @@ before an interview does.
 | **Guard ordering** — wrote the dereferencing case before the null guards, so the guards never ran. Null-pointer crash. | LC 100 Same Tree (2026-08-18); latent in LC 101 wrapper; LC 111 Min Depth (2026-08-22) | Guards go **first**, before any `->`. Scan top-down: is every dereference below the guard that protects it? **Most persistent pattern in the log.** | 3 |
 | **Wrong name for the parameter in scope** — typed `node->left` in a function whose parameter is `root`; earlier, `root` inside `isMirror` whose params are `left`/`right`. Reaching for a name from a *different* function's signature. | LC 101 Symmetric (2026-08-18); LC 104 Max Depth (2026-08-22) | Compiler catches it. Tell: it shows up right after copying a solution shape from a previous problem — the old parameter name comes along with the pattern. Rename deliberately when you reuse a skeleton. | 2 |
 | **`&` for `&&`** — bitwise AND where logical AND was meant. | LC 100 Same Tree (2026-08-18), recurred within session | Compiles, and often *works* on bools, which is why it survives. Grep the boolean conditions for single `&`/`\|` before submitting. | 2 |
-| **Invented member/field name** — reaching for a plausible-sounding name instead of the real one (`node->value` for `node->val`). Not an operator or index confusion; the name simply doesn't exist. | LC 144 Preorder (2026-08-18) | Compiler catches it, but the fix is to go **reread the struct/class definition** rather than guess a second time. Under time pressure the guess feels certain — that certainty is the tell. | 1 |
+| **Invented member/field name** — reaching for a plausible-sounding name instead of the real one (`node->value` for `node->val`). Not an operator or index confusion; the name simply doesn't exist. | LC 144 Preorder (2026-08-18) | Compiler catches it, but the fix is to go **reread the struct/class definition** rather than guess a second time. Under time pressure the guess feels certain — that certainty is the tell. | 2 |
+| **Missing `return` after a special-case block** — handled index 0 / empty list, updated `size`, then fell through into the general code. | LC 707 Design Linked List (2026-09-29), 3 times (`addAtTail`, `addAtIndex`, `deleteAtIndex`) | Compiles and passes the easy cases; shows up as a self-loop, double insert, or two deletes. Tell: an `if (edge case) { ... }` block that doesn't end in `return`. Pattern is special case → update `size` → `return`. | 3 |
+| **Walker reset inside the loop** — wrote `Node* curr = head;` in the loop body (or as the loop's first line), so the walker restarts every pass and `curr` is out of scope after the loop. | LC 707 Design Linked List (2026-09-29), 3 times (`get`, `addAtTail`, `addAtIndex`) | Declare `curr` **once, above** the `for`; the loop only advances it (`curr = curr->next`). Tell: `= head` appearing anywhere below the `for (`. | 3 |
+| **Wrong link order** — rewired `curr->next` before the new node grabbed the old `curr->next`, losing the tail or making a self-loop. | LC 707 Design Linked List (2026-09-29), twice in `addAtIndex` | Save before you break: `newNode->next = curr->next;` **then** `curr->next = newNode;`. Tell: the line that *reads* an arrow comes after the line that *overwrites* it. | 2 |
 
 ## Per-track watchlist
 
@@ -60,6 +63,16 @@ before an interview does.
       "both null → true", `isSubtree` says "null root → false". Different question, different empty case.
 - [ ] `return A || B || C;` — not `if (A||B||C) return true; else return false;`. The branch form
       invites evaluating `A` twice.
+
+### Linked List
+- [ ] Walk `i - 1` steps to stand on the node *before* the change; index 0 has no "before" and is its own case.
+- [ ] Every special-case block ends `size` update → `return`.
+- [ ] Walker declared **once above** the loop, never `= head` inside it.
+- [ ] Link order: new node takes the old `next` first, then the previous node points at the new one.
+- [ ] Bound checks: add allows `index == size` (`> size` rejects), delete/get don't (`>= size` rejects).
+- [ ] Calling a helper that already updates `size` (`addAtHead`) and then doing `size++` again.
+- [ ] `=` vs `==` in conditions (`if (head = nullptr)` wipes the list). Compiler may only warn.
+- [ ] Save the node to free (`toDelete`) **before** rerouting the arrow around it.
 
 ### Graphs
 - [ ] Marking visited at dequeue instead of enqueue — duplicates in the queue.
