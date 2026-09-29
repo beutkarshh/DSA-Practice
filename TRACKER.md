@@ -12,8 +12,8 @@ Progress log across tracks. One row per problem; link the write-up in `problems/
 | Binary Search | [problems/binary-search/](problems/binary-search/) | 0 | |
 | Sliding Window | [problems/sliding-window/](problems/sliding-window/) | 0 | |
 | Recursion | [problems/recursion/](problems/recursion/) | 2 | write-ups still empty; 2 open questions |
-| Trees | [problems/trees/](problems/trees/) | 10 | active track |
-| Linked List | [problems/linked-list/](problems/linked-list/) | 3 | 19: one-pass needs resubmit to confirm; basics: recursive insert-at-end open (not counted) |
+| Trees | [problems/trees/](problems/trees/) | 10 | parked for linked-list detour; next up 102 |
+| Linked List | [problems/linked-list/](problems/linked-list/) | 3 + basics | active track (detour, started 2026-09-22) |
 | Graphs | [problems/graphs/](problems/graphs/) | 0 | |
 | DP | [problems/dp/](problems/dp/) | 0 | |
 
@@ -21,9 +21,12 @@ Progress log across tracks. One row per problem; link the write-up in `problems/
 
 Concepts raised but not yet closed out.
 
+- **LC 19 one-pass** — last pasted version still advanced `fast` by `n - 1`; resubmit with `n + 1`
+  and confirm. Opened 2026-09-25.
+- **Recursive insert at end** (linked-list basics) — scaffolded, never finished. Opened 2026-09-22.
+- **Sorting algorithms** — requested 2026-09-23 (how they work, complexity, C++ implementations);
+  parked at the opening diagnostic.
 - **Unique Paths base cases** — precise conditions at `m-1`, `n-1`. Still open, carried 4 sessions.
-- **Recursive insert at end (linked list)** — scaffolded, not finished. See
-  [basics-search-and-insert-at-end.md](problems/linked-list/basics-search-and-insert-at-end.md).
 
 ### Closed
 
@@ -93,18 +96,21 @@ breaks on one-child nodes.
 
 | # | Problem | Difficulty | Status | Last touched | Write-up |
 | --- | --- | --- | --- | --- | --- |
+| — | Search key / insert at end (GfG basics) | Easy | attempted | 2026-09-22 | [basics-search-and-insert-at-end.md](problems/linked-list/basics-search-and-insert-at-end.md) |
 | 19 | Remove Nth Node From End of List | Medium | solved | 2026-09-25 | [0019-remove-nth-node-from-end-of-list.md](problems/linked-list/0019-remove-nth-node-from-end-of-list.md) |
-| 328 | Odd Even Linked List | Medium | solved | 2026-09-29 | [0328-odd-even-linked-list.md](problems/linked-list/0328-odd-even-linked-list.md) |
 | 707 | Design Linked List | Medium | solved | 2026-09-29 | [0707-design-linked-list.md](problems/linked-list/0707-design-linked-list.md) |
-| — | Basics: Search and Insert at End (GfG-style) | Easy | attempted | 2026-09-22 | [basics-search-and-insert-at-end.md](problems/linked-list/basics-search-and-insert-at-end.md) |
+| 328 | Odd Even Linked List | Medium | solved | 2026-09-29 | [0328-odd-even-linked-list.md](problems/linked-list/0328-odd-even-linked-list.md) |
+| 160 | Intersection of Two Linked Lists | Easy | attempted | 2026-09-29 | — |
 
-**Patterns covered:** stand on the node *before* the change (walk `i - 1`), save-before-break link
-order, and special-case-then-`return` for index 0. `size` makes bounds checks O(1). 328 adds
-in-place rewiring with two walkers: split into two chains, save the second chain's head first, then
-glue. 19 adds the dummy-node trick (removes the "delete the head" special case) and the fast/slow
-gap: fast leads by `n + 1` so slow stops on the predecessor.
+**Core moves (from 707):** stand on the node *before* the change; save before you break an arrow;
+special case handled → update `size` → `return`.
 
-**Open:** 19's one-pass version was last pasted with `n - 1` instead of `n + 1`; resubmit to confirm.
+**Pointer walkers:** 19 (fast/slow with a gap) and 328 (two walkers in lockstep, relink then step).
+After a walking loop, check where the pointers already stand before writing code to "find" something.
+
+**Dummy node:** 19 one-pass. Removes the head special case by guaranteeing a node before `head`.
+
+**Next up:** 160 Intersection (in progress), then back to Trees at 102 Level Order.
 
 ## Graphs
 
