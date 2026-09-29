@@ -13,7 +13,7 @@ Progress log across tracks. One row per problem; link the write-up in `problems/
 | Sliding Window | [problems/sliding-window/](problems/sliding-window/) | 0 | |
 | Recursion | [problems/recursion/](problems/recursion/) | 2 | write-ups still empty; 2 open questions |
 | Trees | [problems/trees/](problems/trees/) | 10 | active track |
-| Linked List | [problems/linked-list/](problems/linked-list/) | 2 | new track |
+| Linked List | [problems/linked-list/](problems/linked-list/) | 3 | 19: one-pass needs resubmit to confirm |
 | Graphs | [problems/graphs/](problems/graphs/) | 0 | |
 | DP | [problems/dp/](problems/dp/) | 0 | |
 
@@ -91,13 +91,17 @@ breaks on one-child nodes.
 
 | # | Problem | Difficulty | Status | Last touched | Write-up |
 | --- | --- | --- | --- | --- | --- |
+| 19 | Remove Nth Node From End of List | Medium | solved | 2026-09-25 | [0019-remove-nth-node-from-end-of-list.md](problems/linked-list/0019-remove-nth-node-from-end-of-list.md) |
 | 328 | Odd Even Linked List | Medium | solved | 2026-09-29 | [0328-odd-even-linked-list.md](problems/linked-list/0328-odd-even-linked-list.md) |
 | 707 | Design Linked List | Medium | solved | 2026-09-29 | [0707-design-linked-list.md](problems/linked-list/0707-design-linked-list.md) |
 
 **Patterns covered:** stand on the node *before* the change (walk `i - 1`), save-before-break link
 order, and special-case-then-`return` for index 0. `size` makes bounds checks O(1). 328 adds
 in-place rewiring with two walkers: split into two chains, save the second chain's head first, then
-glue.
+glue. 19 adds the dummy-node trick (removes the "delete the head" special case) and the fast/slow
+gap: fast leads by `n + 1` so slow stops on the predecessor.
+
+**Open:** 19's one-pass version was last pasted with `n - 1` instead of `n + 1`; resubmit to confirm.
 
 ## Graphs
 

@@ -78,6 +78,11 @@ before an interview does.
 - [ ] Loop condition on two walkers: check the faster one (`even != nullptr && even->next != nullptr`),
       null test first so `->` is never reached on null.
 - [ ] Before searching for a tail, check whether a walker is already standing on it.
+- [ ] Walk counts are 0-indexed steps, not positions: predecessor of 1-indexed position `p` is `p - 1`
+      steps away. Test `n == L` and `L == 1` by hand before submitting.
+- [ ] Fast/slow gap: to stop on the *predecessor*, fast leads by `n + 1`; leading by `n` lands on the target.
+- [ ] Deleting anything that might be the head? Use a dummy node so there's always a "before".
+- [ ] Brace balance after adding a second function to the same block (`unknown type name` is the tell).
 - [ ] Empty-list guard returns the declared type (`return head;`), never `-1`.
 
 ### Graphs
